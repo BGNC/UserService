@@ -4,7 +4,7 @@ import com.bgnc.userservice.model.Role;
 import com.bgnc.userservice.model.User;
 import com.bgnc.userservice.repository.RoleRepository;
 import com.bgnc.userservice.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,17 @@ import java.util.List;
 @Transactional
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private  UserRepository userRepository;
+    private  RoleRepository roleRepository;
+
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
+
     @Override
     public User saveUser(User user) {
 
@@ -35,6 +41,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public void addRoleToUser(String username, String roleName) {
 
+        log.info("Adding role {} to user {}",roleName,username);
         User user = userRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
         user.getRoles().add(role);
@@ -43,11 +50,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(String username) {
+        log.info("Fetching to user {}",username);
         return userRepository.findByUsername(username);
     }
 
     @Override
     public List<User> getUsers() {
+        log.info("Fetching all users");
         return userRepository.findAll();
     }
 }
