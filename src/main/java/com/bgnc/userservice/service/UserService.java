@@ -2,7 +2,7 @@ package com.bgnc.userservice.service;
 
 import com.bgnc.userservice.model.Role;
 import com.bgnc.userservice.model.User;
-
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 

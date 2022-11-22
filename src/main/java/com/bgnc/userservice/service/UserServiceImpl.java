@@ -4,8 +4,13 @@ import com.bgnc.userservice.model.Role;
 import com.bgnc.userservice.model.User;
 import com.bgnc.userservice.repository.RoleRepository;
 import com.bgnc.userservice.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,26 +20,29 @@ import java.util.List;
 @Slf4j
 @Service
 @NoArgsConstructor
+
+
 public class UserServiceImpl implements UserService{
 
+    @Autowired
     private  UserRepository userRepository;
+    @Autowired
     private  RoleRepository roleRepository;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+
+
+
 
     @Override
     public User saveUser(User user) {
 
-        log.info("Saving a new user with {} in database",user.getName());
+
         return userRepository.save(user);
     }
 
     @Override
     public Role saveRole(Role role) {
-        log.info("Saving a new role with {} in database",role.getName());
+
         return roleRepository.save(role);
     }
 
