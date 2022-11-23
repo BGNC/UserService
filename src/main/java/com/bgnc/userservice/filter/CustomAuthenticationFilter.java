@@ -2,6 +2,7 @@ package com.bgnc.userservice.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.bgnc.userservice.model.Role;
 import com.bgnc.userservice.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -55,12 +56,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         /*
         * The type conversion authentication -> User
         * */
-        User user = (User)authentication.getPrincipal();
+        User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String accessToken = JWT.create().
                 withSubject(user.getUsername()).withExpiresAt(new Date(System.currentTimeMillis() +10*60*1000))
                 .withIssuer(request.getRequestURI().toString())
-                .withClaim("roles",user.getRoles().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles",user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refreshToken = JWT.create().
@@ -69,10 +70,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .sign(algorithm);
 
 
-        /*
-        response.setHeader(accessToken,"accessToken");
-        response.setHeader(refreshToken,"refreshToken");
-        */
 
         Map<String,String> tokens = new HashMap<>();
         tokens.put("accessToken",accessToken);
